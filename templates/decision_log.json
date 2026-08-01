@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "competition": "cumcm",
+  "problem_id": "",
+  "deadline": "",
+  "mode": "standard",
+  "current_stage": 0,
+  "team": {
+    "modeler": "",
+    "coder": "",
+    "writer": ""
+  },
+  "task_type": [],
+  "qi_count": 0,
+  "qi_weights": {},
+  "qi_status": {},
+  "budget": {
+    "remaining_hours": 72,
+    "plan": {}
+  },
+  "models": {
+    "question1": { "model": "", "innovation": "", "algorithm": "" }
+  },
+  "results": {
+    "question1": { "key_values": {}, "metrics": {} }
+  },
+  "scores": {
+    "stage_0": {},
+    "stage_1": {},
+    "stage_2": {},
+    "stage_3": {},
+    "stage_4": {}
+  },
+  "compliance": {
+    "anonymous_checked": false,
+    "similarity_target": "<=20%",
+    "ai_disclosure": false,
+    "md5_uploaded": false,
+    "submitted": false
+  },
+  "events": [],
+  "notes": ""
+}
