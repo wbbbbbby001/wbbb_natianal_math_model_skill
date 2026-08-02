@@ -115,10 +115,22 @@
 \setlength{\parindent}{2em}
 \linespread{1.0}                 % 单倍行距（书 §7.2）
 \emergencystretch=1.5em          % 允许轻微拉伸断行，避免长公式段落右边界溢出
+% ⚠️ 公式字号统一：禁止 \resizebox/\scalebox 套公式（会改字号）；超宽公式用 \tfrac 或 aligned 拆行
 \captionsetup{font=small,labelfont=bf}
 
 % 图形路径（指向 figures 目录）
 \graphicspath{{../figures/}}
+
+% ===== 表格统一 small + 仅超宽才缩放（防窄表被 resizebox 放大）=====
+\AtBeginEnvironment{tabular}{\small}
+\newbox\tabbox
+\newcommand{\fittab}[1]{%
+  \setbox\tabbox=\hbox{#1}%
+  \ifdim\wd\tabbox>\textwidth
+    \resizebox{\textwidth}{!}{#1}%
+  \else
+    #1%
+  \fi}
 
 \lstset{
   basicstyle=\small\ttfamily, breaklines=true, frame=single,
@@ -203,9 +215,10 @@
 \subsection{整体建模流程}
 \begin{figure}[H]\centering
   \includegraphics[width=0.85\textwidth]{fig_workflow.png}
-  \caption{Overall modeling workflow}
+  \caption{整体建模流程（数据预处理$\to$四问建模求解$\to$模型检验）}
   \label{fig:workflow}
 \end{figure}
+% ⚠️ 整体建模流程图必须覆盖全部子问题（每问一个阶段框），不得只画某一问的流程；分问流程子图另画
 ```
 
 ### 4_assumptions.tex（3-5 条）
@@ -281,6 +294,7 @@
 > **附录编号用阿拉伯数字（附录1、附录2、…），禁止字母（附录A/B/C）**；用 `\section*{附录N …}`（无编号）精确显示"附录1/附录2/…"，对齐优秀论文命名；正文用 `\ref{...}`/文字"见附录 X"引用，表1/表2 中"对应附录"列必须与附录实际编号一致。
 ```latex
 \clearpage
+\section*{附录：代码与数据说明}   % ⚠️ 参考文献后必须有"附录"大标题，再进运行环境说明
 % ===== 运行环境说明（四件套之4）=====
 \textbf{运行环境}：Python 3.12，numpy/scipy/pandas/matplotlib/sklearn。
 依赖清单见支撑材料 code/requirements.txt。一键复现：\texttt{python main\_solver.py}。
