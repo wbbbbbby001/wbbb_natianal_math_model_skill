@@ -61,9 +61,9 @@ description: 数学建模国赛（CUMCM）端到端协作技能。当用户点�
 | 开始建模（总览） | `references/judging_standards.md`（评审标准+潜规则） |
 | 阶段0 选题 | `references/rules_2026.md`（当届规则）+ `references/time_plan_72h.md`（时间轴） |
 | 阶段1 建模手 | `references/seven_steps.md` + `references/score_modules.md` + `references/innovation_paths.md` + `references/model_catalog.md` + `references/paper_depth_guide.md`（推导深度标准） + `templates/modeler_output.md`；光谱/周期信号类题目另加 `references/spectral_processing_notes.md` |
-| 阶段2 编程手 | `references/model_catalog.md` + `templates/coder_output.md`；光谱/周期信号类题目另加 `references/spectral_processing_notes.md`（单位一致性/包络窗宽/三方法交叉验证） |
-| 阶段3 论文手 | `references/paper_structure.md` + `references/abstract_guide.md` + `references/paper_depth_guide.md`（结构与篇幅标准） + `references/paper_depth_expansion.md`（正文深度扩充清单，防"正文太薄"） + `references/workflow_figure.md`（整体建模流程图模板，问题分析/重述必用） + `references/appendix_guide.md`（附录四件套） + `templates/writer_output.md` + `templates/abstract_checklist.md` |
-| 阶段4 终审提交 | `references/format_checker.md` + `references/rules_2026.md` |
+| 阶段2 编程手 | `references/model_catalog.md` + `references/figure_review.md`（图片审查：图题在上、图内无标题、编号与文档图序一致、流程图专项——箭头贴边/文字不溢出/无旁注） + `templates/coder_output.md`；光谱/周期信号类题目另加 `references/spectral_processing_notes.md`（单位一致性/包络窗宽/三方法交叉验证） |
+| 阶段3 论文手 | `references/paper_structure.md` + `references/abstract_guide.md` + `references/paper_depth_guide.md`（结构与篇幅标准） + `references/paper_depth_expansion.md`（正文深度扩充清单，防"正文太薄"） + `references/workflow_figure.md`（整体建模流程图模板，问题分析/重述必用） + `references/figure_review.md`（插图后核对图注编号==引用编号、流程图逐项过检） + `references/appendix_guide.md`（附录四件套） + `templates/writer_output.md` + `templates/abstract_checklist.md` |
+| 阶段4 终审提交 | `references/format_checker.md` + `references/figure_review.md`（终审前逐张过图质量清单） + `references/rules_2026.md` |
 | 需要检测 | `scripts/format_check.py`（合规）、`scripts/depth_check.py`（深度）、`scripts/verify_code.py`（代码），按需运行 |
 
 领域参考文件是**懒加载**知识库；SKILL.md 主体保持精简，不复制参考内容。
