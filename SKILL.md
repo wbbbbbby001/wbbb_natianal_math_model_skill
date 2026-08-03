@@ -44,7 +44,7 @@ description: 数学建模国赛（CUMCM）端到端协作技能。当用户点�
 | 1 | 建模手 | `references/stage_01_modeler.md` | 6-12h | `modeling_thought.md`（全链路建模思路） | L1 评分：模型选型有理由、创新点显性、公式≥10/问、**推导完整（分布建模→闭式→解释，无"直接给公式"跳跃）**、符号统一 |
 | 2 | 编程手 | `references/stage_02_coder.md` | 12-18h | `code/*.py` + `figures/*.png` + `data/*.csv` | `verify_code.py` 全脚本可运行；图内中文标注（SimHei 无乱码）≥300DPI；结果数值回填 state |
 | 3 | 论文手 | `references/stage_03_writer.md` | 12-24h | `final_paper.md` + `paper/*.tex` + `paper/main.pdf` | `format_check.py` PASS；PDF 编译成功；摘要5审；**优秀论文深度结构（问题重述：背景分段展开+数据说明+逐问重述；问题分析：数据特征+逐问单独分析+重难点+选型+技术路线；每问独立成章；独立灵敏度章；模型评价分问）**；**正文深度：standard 模式正文页数>23（即≥24，目标 24-28，上限 30）且 `depth_check.py` PASS**；**附录四件套：支撑文件目录表+附录目录表+分问全量代码+运行环境说明（2026 正文≤30 页，附录不计页数）**；**Overfull=0（表格不超版心居中）+ 无AI编辑痕迹**；L2 一致性回检 |
-| 4 | 终审与提交 | `references/stage_04_final.md` | 2-6h | 终稿 + 支撑材料包 + 合规清单 | 五步终审通过；匿名/查重/MD5/提前提交合规 |
+| 4 | 终审与提交 | `references/stage_04_final.md` | 2-6h | 终稿 + 支撑材料包 + 合规清单 | 五步终审通过；匿名/查重/提前提交合规；**MD5 由队伍按官方系统自行生成上传（工作流不自动生成）** |
 
 **三角色交付主线**（本 skill 招牌）：阶段1 建模手 → `modeling_thought.md`；阶段2 编程手 → `code/`+`figures/`；阶段3 论文手 → `final_paper.md`+`paper/`。每个角色拿到前一个角色的完整产物，禁止跳步。
 
@@ -67,6 +67,27 @@ description: 数学建模国赛（CUMCM）端到端协作技能。当用户点�
 | 需要检测 | `scripts/format_check.py`（合规）、`scripts/depth_check.py`（深度）、`scripts/verify_code.py`（代码），按需运行 |
 
 领域参考文件是**懒加载**知识库；SKILL.md 主体保持精简，不复制参考内容。
+
+---
+
+## 实战审查经验（2025-C NIPT 复盘，2026-08 沉淀）
+
+> 三次审阅迭代暴露的高频格式/图表问题，写入 stage_03_writer.md 与 figure_review.md 对应检查项；此处为速记。
+
+| # | 审查发现 | 根因 | 修复口径 |
+|---|---------|------|---------|
+| 1 | 摘要页题目未居中、字号与一级标题不一 | `\begin{center}{\Large...}` 与默认标题字号混用 | 题目 `\zihao{3}\bfseries` 居中（16pt），一级标题 `\zihao{4}` 居中（14pt），摘要标题 `\zihao{4}` 居中 |
+| 2 | 摘要首段无首行缩进 | 摘要段误用 `\noindent` | 摘要全部段落 `\setlength{\parindent}{2em}`，禁止 `\noindent`；每段均缩进 2 字符 |
+| 3 | 一级"一、"下二级出现"一.1"而非"1.1" | 只重定义 `\thesection=\chinese{section}`，subsection 默认继承为"一.1" | 必须同时 `\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}` 并 `\ctexset{subsection={number=\arabic{section}.\arabic{subsection}}}` |
+| 4 | 技术路线流程图箭头畸形、结构僵硬 | 箭头与盒子绘制顺序错误（箭头头穿入盒内）、多次重复绘制 | 先画全部垂直箭头（盒底→下一盒顶），再画盒子盖住残留箭头；盒子统一宽高与间距；标题/内容分栏排版；文字手动 `\n` 换行 |
+| 5 | 箱线图"圆圈重叠"（图被误认图序） | `boxplot` 默认 `showfliers=True` 画离群点圆圈，多离群时重叠 | `boxplot(..., showfliers=False)` + 红色均值点展示组间差异；注意 PDF 图序 ≠ 文件名序，按 `\includegraphics` 出现顺序核对用户所指图 |
+| 6 | 字号/间距规范后正文页数波动 | section/subsection 字号从默认调小，正文少 1 页 | 格式修正后必须重跑 `depth_check.py`（PDF 页数）复核，不足则补实质内容（如数据预处理要点小节） |
+| 7 | 图内 `kg/m²` 上标变乱码方格 | SimHei 中文字体缺 `²`（U+00B2）字形，Unicode 上标渲染失败 | 图内物理单位一律用 mathtext：`'kg/m$^2$'`（stix 渲染，不依赖中文字体）；全文检索 `²³⁴` 等特殊上标替换 |
+| 8 | 流程图箭头方向反向/箭头尖穿入盒内 | `ax.annotate('', xy=..., xytext=...)` 中 **xy 是箭头终点（尖）、xytext 是起点**，方向向下时 xy 必须在下（下一盒顶上方） | 方向向下：`xy=(cx, y_next+0.03)`（下盒顶上方）、`xytext=(cx, y_cur-0.05)`（当前盒底），`arrowstyle='-|>'`；先画全部箭头再画盒子 |
+| 9 | PDF 未真正更新（提交后 MD5 与旧版相同） | xelatex 在 aux 未变化时可能不重新输出 main.pdf，复制出的"新 PDF"实为旧版 | 改图/改文后**删 `main.aux` 再双遍编译**，并用 `Get-FileHash` 核对 MD5 变化；提交包 MD5 必须与 paper/main.pdf 一致 |
+| 10 | 流程图"无思考度、无对比、无重点" | 单色、等大、直排盒，无分层与层级 | 三色原则（≤3 色系：主流程蓝 + 核心决策橙高亮 + 目标/结论深蓝）+ 核心阶段加粗边框 + 顶部目标盒/底部结论盒 + 左侧层次标注**直接平放**（不旋转、不嵌文本框）归纳"数据/建模/决策/判定/检验/交付"层 + 去冗余产出标签 + 粗实线单向向下箭头 |
+| 11 | 流程图特殊字符乱码 / 语义混杂 | 单位上标、箭头、标签混用 | 图内物理单位一律 mathtext（`'kg/m$^2$'`）；箭头粗实线=主流程、虚线=依赖/反馈，一图一义；文字关键词短语化不写整句；标题 11-13pt、内容 8-9pt |
+| 12 | MD5 工作流调整（用户口径） | 工作流自动生成 MD5 记录无实际意义（上传须用户在官方系统完成） | 阶段4 **只打包提交包**（论文 PDF + 支撑材料 ZIP + AI 说明），**不生成 MD5 记录文件**；官方 MD5 由队伍按官方系统要求在上传时自行生成 |
 
 ---
 
